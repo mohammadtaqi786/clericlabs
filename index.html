@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cleric Labs — An AI Consulting Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0e0a; --cream:#f4ecd8; --cream-dim:#c9bfa8;
+    --warm:#ffd6a5; --meadow:#6b8e5a; --violet:#9d7bb5;
+    --ease:cubic-bezier(0.2,0.6,0.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;color:var(--cream);}
+  html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
+  body{font-family:'Instrument Sans',system-ui,sans-serif;font-size:17px;line-height:1.6;overflow-x:hidden;}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  .serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:0.32em;font-size:11px;font-weight:400;color:var(--cream-dim);}
+  h1.serif{line-height:0.95;letter-spacing:-0.025em;}
+  h2.serif{line-height:1.0;letter-spacing:-0.02em;}
+  p{color:var(--cream-dim);text-wrap:pretty;}
+
+  /* OPENING — frame-sequence scrubber. Scroll = playback. */
+  #opening{position:relative;width:100%;height:460vh;background:#000;}
+  #opening .stage{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:#000;}
+
+  /* Poster image behind canvas — instant first-paint while JPGs decode */
+  .frame-poster{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 55%;
+    background:#000;
+  }
+
+  .frame-canvas{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;object-position:center 55%;
+  }
+
+  .vignette{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%,rgba(0,0,0,0.30),transparent 60%),
+      radial-gradient(ellipse 100% 70% at 50% 100%,rgba(0,0,0,0.50),transparent 65%);
+  }
+  .opening-tint{
+    position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(10,14,10,0.10),rgba(10,14,10,0.18) 60%,rgba(10,14,10,0.40));
+  }
+
+  .particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+  .particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--warm);
+    box-shadow:0 0 8px rgba(255,214,165,0.85),0 0 18px rgba(255,214,165,0.45);
+    opacity:0;animation:drift linear infinite;}
+  @keyframes drift{
+    0%{transform:translate3d(0,20vh,0) scale(0.6);opacity:0;}
+    10%{opacity:0.85;} 50%{opacity:0.7;} 90%{opacity:0.4;}
+    100%{transform:translate3d(var(--dx,0),-110vh,0) scale(1);opacity:0;}
+  }
+
+  .beat{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:0 8vw;text-align:center;will-change:opacity,transform;pointer-events:none;
+    opacity:0;transition:opacity 0.6s var(--ease);}
+  .beat.is-ready{}
+  .beat .inner{display:flex;flex-direction:column;align-items:center;gap:24px;max-width:1200px;}
+
+  /* Beat 1 — the question, locked at the top, bold and central */
+  .q-line{
+    font-size:clamp(2.2rem,6.4vw,5.6rem);line-height:1.1;color:var(--cream);
+    letter-spacing:-0.02em;text-shadow:0 2px 30px rgba(0,0,0,0.55);
+    display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0.25em;
+  }
+  .q-line .qpre{white-space:nowrap;}
+  .q-rotator{position:relative;display:inline-block;height:1.1em;overflow:hidden;vertical-align:bottom;color:var(--warm);visibility:hidden;}
+  .q-rotator.is-ready{visibility:visible;}
+  .q-rotator-track{display:flex;flex-direction:column;will-change:transform;}
+  .q-rotator-track > span{height:1.1em;line-height:1.1em;display:block;white-space:nowrap;padding-right:0.05em;}
+
+  /* Beat 2 — title pinned to the monolith */
+  .title-card{display:flex;flex-direction:column;align-items:center;gap:18px;color:var(--cream);}
+  .title-card .mono{color:var(--warm);}
+  .title-card h1{font-size:clamp(2.6rem,6.8vw,5.6rem);color:var(--cream);text-shadow:0 2px 40px rgba(0,0,0,0.7);}
+  .title-card .sub{font-size:14px;color:var(--cream-dim);letter-spacing:0.04em;}
+  .title-card .sub a{color:var(--warm);border-bottom:1px solid rgba(255,214,165,0.4);padding-bottom:1px;pointer-events:auto;transition:color 0.4s var(--ease),border-color 0.4s var(--ease);}
+  .title-card .sub a:hover{color:var(--cream);border-color:var(--cream);}
+  .scroll-cue{display:inline-flex;flex-direction:column;align-items:center;gap:10px;color:var(--cream-dim);font-size:10px;margin-top:8px;}
+  .scroll-cue::after{content:"";display:block;width:1px;height:32px;background:linear-gradient(180deg,var(--cream-dim),transparent);}
+
+  /* Animated scroll cue under the question (Beat 1) */
+  .q-cue{margin-top:36px;display:inline-flex;flex-direction:column;align-items:center;gap:14px;
+    color:var(--cream-dim);pointer-events:none;}
+  .q-cue .mono{color:var(--cream-dim);}
+  .q-cue-svg{width:18px;height:26px;display:block;animation:cueBob 2.4s ease-in-out infinite;}
+  .q-cue-track{position:relative;width:1px;height:54px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(244,236,216,0.18),rgba(244,236,216,0.06));}
+  .q-cue-track::after{content:"";position:absolute;left:-1px;top:-30%;width:3px;height:30%;
+    background:linear-gradient(180deg,transparent,var(--warm),transparent);
+    filter:blur(0.5px);animation:cueRun 2.4s cubic-bezier(0.55,0.05,0.5,1) infinite;}
+  @keyframes cueRun{0%{top:-30%;opacity:0;}15%{opacity:1;}85%{opacity:1;}100%{top:100%;opacity:0;}}
+  @keyframes cueBob{0%,100%{transform:translateY(0);opacity:0.65;}50%{transform:translateY(4px);opacity:1;}}
+
+  /* Loading hint */
+  .loading-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.32em;
+    font-size:10px;color:var(--cream-dim);opacity:0;transition:opacity 0.4s var(--ease);}
+  .loading-hint.is-on{opacity:0.6;}
+
+  /* Know more placeholder */
+  .know-more{position:relative;padding:clamp(120px,22vh,240px) clamp(28px,6vw,96px) clamp(80px,14vh,160px);
+    background:var(--bg-deep);text-align:center;border-top:1px solid rgba(244,236,216,0.05);}
+  .know-more::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(107,142,90,0.08),transparent 65%);}
+  .km-inner{position:relative;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:22px;}
+  .km-inner .mono{color:var(--meadow);}
+  .km-inner h2{font-size:clamp(2rem,4.5vw,3.4rem);color:var(--cream);}
+  .km-inner p{font-size:17px;max-width:520px;color:var(--cream-dim);}
+
+  footer.site-foot{padding:32px 28px 48px;background:var(--bg-deep);border-top:1px solid rgba(244,236,216,0.06);
+    display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:0 auto;flex-wrap:wrap;gap:16px;}
+  footer.site-foot .mono{color:var(--cream-dim);}
+
+  @media (max-width:880px){
+    body{font-size:15px;}
+    #opening{height:380vh;}
+    footer.site-foot{flex-direction:column;align-items:flex-start;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .particle{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<section id="opening">
+  <div class="stage">
+    <img class="frame-poster" src="frames/f001.jpg" alt="" aria-hidden="true" decoding="async" fetchpriority="high" />
+    <canvas class="frame-canvas" data-canvas></canvas>
+    <div class="opening-tint"></div>
+    <div class="vignette"></div>
+    <div class="particles" data-particles="14"></div>
+
+    <span class="loading-hint mono" data-loading>Loading…</span>
+
+    <!-- Beat 1 — locked first frame: the question, big and centered -->
+    <div class="beat" data-beat="1">
+      <div class="inner">
+        <span class="mono">a question for you</span>
+        <div class="q-line">
+          <span class="qpre serif">Are you overwhelmed by</span>
+          <span class="q-rotator" data-rotator data-words='["AI agents","AI infrastructure","Claude complexity","voice AI callers","AI appointment setters"]'>
+            <span class="q-rotator-track serif"></span>
+          </span><span class="serif">?</span>
+        </div>
+        <div class="q-cue">
+          <div class="q-cue-track"></div>
+          <svg class="q-cue-svg" viewBox="0 0 18 26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 L9 14 L15 8" opacity="0.55"/><path d="M3 16 L9 22 L15 16"/></svg>
+          <span class="mono">scroll</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat 2 — final frame (the monolith / cleric): the reveal -->
+    <div class="beat" data-beat="2">
+      <div class="inner">
+        <div class="title-card">
+          <span class="mono">We Are</span>
+          <h1 class="serif">Cleric Labs.</h1>
+          <p class="sub"><a href="#know-more">Book a free consultation</a></p>
+          <span class="scroll-cue mono">Scroll to know more</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="know-more" id="know-more">
+  <div class="km-inner">
+    <span class="mono">to be designed</span>
+    <h2 class="serif">More, soon.</h2>
+    <p>We map. We build. We disappear. The rest of this page is on the way.</p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <span class="mono">© Cleric Labs</span>
+  <span class="mono">We map. We build. We disappear.</span>
+</footer>
+
+<script>
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const smoothstep=(e0,e1,x)=>{const t=Math.min(1,Math.max(0,(x-e0)/(e1-e0)));return t*t*(3-2*t);};
+  const clamp01=v=>Math.min(1,Math.max(0,v));
+
+  // Particles
+  document.querySelectorAll('[data-particles]').forEach(c=>{
+    const n=parseInt(c.getAttribute('data-particles'),10)||14;
+    for(let i=0;i<n;i++){
+      const p=document.createElement('span');p.className='particle';
+      const dur=14+Math.random()*16;
+      p.style.left=(Math.random()*100)+'%';
+      p.style.width=p.style.height=(2+Math.random()*4)+'px';
+      p.style.bottom=(-10+Math.random()*30)+'vh';
+      p.style.setProperty('--dx',((Math.random()-0.5)*80)+'px');
+      p.style.animationDuration=dur+'s';
+      p.style.animationDelay=(-Math.random()*dur)+'s';
+      p.style.opacity=(0.3+Math.random()*0.5).toFixed(2);
+      c.appendChild(p);
+    }
+  });
+
+  const opening=document.querySelector('#opening');
+  const canvas=document.querySelector('[data-canvas]');
+  const ctx=canvas.getContext('2d');
+  const loadingHint=document.querySelector('[data-loading]');
+  const beats=[...document.querySelectorAll('.beat')];
+
+  // Frame sequence
+  const FRAME_COUNT=60;
+  const frames=new Array(FRAME_COUNT);
+  let firstReady=false;
+  let loadedCount=0;
+
+  function frameUrl(i){
+    const idx=String(i+1).padStart(3,'0');
+    return `frames/f${idx}.jpg`;
+  }
+
+  function preloadAll(){
+    loadingHint.classList.add('is-on');
+    // Load first + last first so the opening looks right immediately + the bottom-snap reveal works
+    const order=[0,FRAME_COUNT-1];
+    for(let i=1;i<FRAME_COUNT-1;i++) order.push(i);
+    order.forEach(i=>{
+      const im=new Image();
+      im.decoding='async';
+      im.onload=()=>{
+        frames[i]=im;
+        loadedCount++;
+        if(i===0 && !firstReady){
+          firstReady=true;
+          resizeCanvas();
+          drawFrame(0);
+          // Reveal beats only once we have a real frame painted
+          beats.forEach(b=>b.classList.add('is-ready'));
+          loadingHint.classList.remove('is-on');
+        }
+        if(loadedCount===FRAME_COUNT){
+          loadingHint.classList.remove('is-on');
+          update();
+        }
+      };
+      im.onerror=()=>{ loadedCount++; };
+      im.src=frameUrl(i);
+    });
+    // Failsafe: if first frame stalls, show beats anyway after 1.5s so layout doesn't look frozen
+    setTimeout(()=>{ if(!firstReady){ beats.forEach(b=>b.classList.add('is-ready')); } }, 1500);
+  }
+  preloadAll();
+
+  function resizeCanvas(){
+    const dpr=Math.min(2, window.devicePixelRatio||1);
+    canvas.width=Math.floor(window.innerWidth*dpr);
+    canvas.height=Math.floor(window.innerHeight*dpr);
+    canvas.style.width=window.innerWidth+'px';
+    canvas.style.height=window.innerHeight+'px';
+  }
+  window.addEventListener('resize', ()=>{ resizeCanvas(); update(); });
+
+  function drawFrame(i){
+    const img=frames[i] || nearest(i);
+    if(!img) return;
+    const cw=canvas.width, ch=canvas.height;
+    const iw=img.naturalWidth, ih=img.naturalHeight;
+    // cover fit
+    const sR=cw/ch, iR=iw/ih;
+    let dw, dh, dx, dy;
+    if(iR>sR){
+      dh=ch; dw=ch*iR; dx=(cw-dw)/2; dy=0;
+    } else {
+      dw=cw; dh=cw/iR; dx=0; dy=(ch-dh)/2;
+    }
+    ctx.drawImage(img,dx,dy,dw,dh);
+  }
+  function nearest(i){
+    for(let d=1;d<FRAME_COUNT;d++){
+      if(frames[i-d]) return frames[i-d];
+      if(frames[i+d]) return frames[i+d];
+    }
+    return null;
+  }
+
+  let lastDrawn=-1;
+  function progress(){
+    const vh=window.innerHeight;
+    const rect=opening.getBoundingClientRect();
+    const top=rect.top+window.scrollY;
+    const total=opening.offsetHeight-vh;
+    return clamp01((window.scrollY-top)/Math.max(1,total));
+  }
+  function update(){
+    const p=progress();
+    // Linear-ish playback through ALL frames, with brief holds at start (question reads)
+    // and end (title settles). The journey itself is felt at full length.
+    // 0–0.10  → frame 0 hold
+    // 0.10–0.82 → linear travel through every frame
+    // 0.82–1.0 → frame 59 hold
+    let fp;
+    if(p<0.10){ fp=0; }
+    else if(p<0.82){ fp=(p-0.10)/0.72; }
+    else { fp=1; }
+    const idx=Math.round(fp*(FRAME_COUNT-1));
+    if(idx!==lastDrawn){
+      drawFrame(idx);
+      lastDrawn=idx;
+    }
+    // Beat 1 (question) holds first ~10%, fades out by 22%
+    const b1=(1-smoothstep(0.10,0.22,p));
+    // Beat 2 (title) fades in 0.55 → 0.70 — earlier so user reaches it sooner
+    const b2=smoothstep(0.55,0.70,p);
+    beats[0].style.opacity=b1.toFixed(3);
+    beats[1].style.opacity=b2.toFixed(3);
+    if(!reduced){
+      beats[1].style.transform=`translateY(${((1-b2)*16).toFixed(2)}px)`;
+    }
+  }
+
+  resizeCanvas();
+  let rafPending=false;
+  window.addEventListener('scroll', ()=>{
+    if(!rafPending){
+      rafPending=true;
+      requestAnimationFrame(()=>{ update(); rafPending=false; });
+    }
+  }, {passive:true});
+
+  // Rotating words
+  document.querySelectorAll('[data-rotator]').forEach(rot=>{
+    const words=JSON.parse(rot.getAttribute('data-words'));
+    const track=rot.querySelector('.q-rotator-track');
+    [...words,words[0]].forEach(w=>{const s=document.createElement('span');s.textContent=w;track.appendChild(s);});
+    function size(){
+      const probe=document.createElement('span');
+      probe.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-style:italic;';
+      probe.className='serif';
+      // Match the q-line font-size so measurement is correct
+      const cs=getComputedStyle(rot.parentElement);
+      probe.style.fontSize=cs.fontSize;
+      probe.style.fontFamily=cs.fontFamily;
+      document.body.appendChild(probe);
+      let maxW=0;words.forEach(w=>{probe.textContent=w;const wd=probe.getBoundingClientRect().width;if(wd>maxW)maxW=wd;});
+      rot.style.minWidth=Math.ceil(maxW+8)+'px';
+      document.body.removeChild(probe);
+      rot.classList.add('is-ready');
+    }
+    // Wait for fonts so width is accurate; fall back if Font Loading API missing
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(size).catch(size);
+    } else {
+      requestAnimationFrame(size);
+    }
+    let idx=0;
+    setInterval(()=>{
+      idx++;
+      track.style.transition='transform 0.55s cubic-bezier(0.65,0,0.25,1)';
+      track.style.transform=`translateY(${-idx*1.1}em)`;
+      if(idx===words.length){
+        setTimeout(()=>{track.style.transition='none';track.style.transform='translateY(0em)';idx=0;},560);
+      }
+    },1600);
+  });
+})();
+</script>
+</body>
+</html>
