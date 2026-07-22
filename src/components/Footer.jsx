@@ -2,9 +2,9 @@ import clericlabsLogo from '../logos/clericlabs.png'
 import '../styles/components/Footer.css'
 
 const navigate = [
-  ['Home', '#top'],
+  ['Home', '/'],
   ['About', '/about'],
-  ['Case Studies', '#services'],
+  ['Case Studies', '/#services'],
 ]
 
 const services = [

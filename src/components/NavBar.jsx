@@ -3,9 +3,9 @@ import clericlabsLogo from '../logos/clericlabs.png'
 import '../styles/components/NavBar.css'
 
 const navLinks = [
-  ['Home', '#top'],
-  ['About Us', '#about'],
-  ['Case Study', '#testimonials'],
+  ['Home', '/'],
+  ['About Us', '/about'],
+  ['Case Study', '/#testimonials'],
 ]
 
 export function NavBar() {

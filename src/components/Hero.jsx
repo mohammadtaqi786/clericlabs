@@ -99,9 +99,9 @@ export function Hero({
             <span className="logo-text">ClericLabs</span>
           </a>
           <ul className="nav-links">
-            <li><a href="#top">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="#testimonials">Case Study</a></li>
-            <li><a href="#about">About Us</a></li>
+            <li><a href="/about">About Us</a></li>
           </ul>
           <a
             className="nav-btn"
