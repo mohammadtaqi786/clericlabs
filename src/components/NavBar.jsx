@@ -4,7 +4,7 @@ import '../styles/components/NavBar.css'
 
 const navLinks = [
   ['Home', '/'],
-  ['About Us', '/about'],
+  ['About Us', '#'],
   ['Case Study', '/#testimonials'],
 ]
 

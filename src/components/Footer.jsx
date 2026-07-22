@@ -3,7 +3,7 @@ import '../styles/components/Footer.css'
 
 const navigate = [
   ['Home', '/'],
-  ['About', '/about'],
+  ['About Us', '#'],
   ['Case Studies', '/#services'],
 ]
 
