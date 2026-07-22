@@ -1,0 +1,120 @@
+.final-cta-section {
+  position: relative;
+  padding: clamp(40px, 6vh, 60px) 32px 0;
+  color: #fff;
+  background: transparent;
+  overflow: hidden;
+}
+
+.final-cta-shell {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+}
+
+.final-cta-card {
+  position: relative;
+  padding: clamp(48px, 6vw, 72px) clamp(24px, 5vw, 64px);
+  overflow: hidden;
+  text-align: left;
+}
+
+.final-cta-card::before {
+  content: '';
+  position: absolute;
+  inset: auto 14% -88% 14%;
+  height: 132%;
+  background:
+    radial-gradient(circle at 24% 40%, rgba(240, 160, 107, 0.11), transparent 32%),
+    radial-gradient(circle at 52% 24%, rgba(217, 140, 168, 0.07), transparent 30%),
+    radial-gradient(circle at 78% 44%, rgba(145, 137, 216, 0.11), transparent 34%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.final-cta-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.final-cta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 480px);
+  gap: clamp(32px, 5vw, 54px);
+  align-items: center;
+}
+
+.final-cta-content {
+  text-align: left;
+}
+
+.final-cta-card h2 {
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 16px;
+}
+
+.final-cta-card h2 .serif-italic,
+.final-cta-card h2 span {
+  color: #ffffff !important;
+  font-family: inherit !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+}
+
+.final-cta-content > p:not(.eyebrow) {
+  max-width: 480px;
+  margin: 18px 0 0;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+.calendly-embed-container {
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #06070d;
+  border: 1px solid rgba(145, 137, 216, 0.22);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  height: 380px;
+}
+
+@media (max-width: 860px) {
+  .final-cta-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .final-cta-content {
+    text-align: center;
+  }
+
+  .final-cta-content .h2-underline {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .final-cta-content > p:not(.eyebrow) {
+    margin-inline: auto;
+  }
+
+  .calendly-embed-container {
+    height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .final-cta-section {
+    padding: 40px 20px 0;
+  }
+
+  .final-cta-card {
+    padding: 40px 20px;
+  }
+}

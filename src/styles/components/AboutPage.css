@@ -1,0 +1,46 @@
+.about-page-hero {
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  color: #fff;
+}
+
+.about-page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 80%);
+  pointer-events: none;
+}
+
+.about-page-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(56px, 8vh, 96px) 32px clamp(64px, 10vh, 112px);
+  text-align: center;
+}
+
+.about-page-hero-content .eyebrow {
+  margin-bottom: 18px;
+}
+
+.about-page-headline {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: clamp(36px, 5.5vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .about-page-hero-content {
+    padding: 48px 20px 64px;
+  }
+}

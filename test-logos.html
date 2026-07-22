@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background-color: #0a1024; color: white; font-family: sans-serif; padding: 40px; }
+    .logo-container { display: flex; flex-direction: column; gap: 20px; }
+    .logo-row { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    .logo-img { height: 60px; object-fit: contain; }
+    .logo-img.invert { filter: invert(1); }
+    .logo-img.white-sil { filter: brightness(0) invert(1); }
+  </style>
+</head>
+<body>
+  <h1>Original (left) vs Inverted (middle) vs Silhouette (right)</h1>
+  <div class="logo-container">
+    <div class="logo-row"><span>CloserX: </span><img class="logo-img" src="public/logos/closerx.png"><img class="logo-img invert" src="public/logos/closerx.png"><img class="logo-img white-sil" src="public/logos/closerx.png"></div>
+    <div class="logo-row"><span>Generate: </span><img class="logo-img" src="public/logos/generate.png"><img class="logo-img invert" src="public/logos/generate.png"><img class="logo-img white-sil" src="public/logos/generate.png"></div>
+    <div class="logo-row"><span>SimpliScale: </span><img class="logo-img" src="public/logos/simpliscale.png"><img class="logo-img invert" src="public/logos/simpliscale.png"><img class="logo-img white-sil" src="public/logos/simpliscale.png"></div>
+    <div class="logo-row"><span>Agency Asset: </span><img class="logo-img" src="public/logos/agency_asset.png"><img class="logo-img invert" src="public/logos/agency_asset.png"><img class="logo-img white-sil" src="public/logos/agency_asset.png"></div>
+    <div class="logo-row"><span>King Caller: </span><img class="logo-img" src="public/logos/king_caller.png"><img class="logo-img invert" src="public/logos/king_caller.png"><img class="logo-img white-sil" src="public/logos/king_caller.png"></div>
+    <div class="logo-row"><span>Stayliado: </span><img class="logo-img" src="public/logos/stayliado.png"><img class="logo-img invert" src="public/logos/stayliado.png"><img class="logo-img white-sil" src="public/logos/stayliado.png"></div>
+    <div class="logo-row"><span>WiFiSales: </span><img class="logo-img" src="public/logos/wifisales_boost.png"><img class="logo-img invert" src="public/logos/wifisales_boost.png"><img class="logo-img white-sil" src="public/logos/wifisales_boost.png"></div>
+    <div class="logo-row"><span>IE: </span><img class="logo-img" src="public/logos/ie.png"><img class="logo-img invert" src="public/logos/ie.png"><img class="logo-img white-sil" src="public/logos/ie.png"></div>
+  </div>
+</body>
+</html>
